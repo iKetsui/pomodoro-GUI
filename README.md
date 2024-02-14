@@ -11,6 +11,12 @@ TODO; - a todo list to track it (will add more later)-
 
 
 [important]: turn the program from SECs to MINs.
+
 [important]: add parameter for the MIN.
+
 [important]: add modern themes.
+
+[important]: add getopt
+
 [effect]: add cast light linked to the mouse coordinates 
+
