@@ -13,7 +13,7 @@ typedef struct Timer {
 } Timer;
 
 Timer seconds = {0}; 
-double countTo = 60;
+double countTo = 12001;
 int secScreen = 0;
 
 void StartTimer(Timer *timer, double lifetime)
