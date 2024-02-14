@@ -13,8 +13,11 @@ typedef struct Timer {
 } Timer;
 
 Timer seconds = {0}; 
-double countTo = 60;
+double countTo = 12001;
 int secScreen = 0;
+
+
+
 
 void StartTimer(Timer *timer, double lifetime)
 {
@@ -42,28 +45,37 @@ void ResetTimer(Timer *timer, double lifetime)
     timer->startTime = GetTime();
     timer->lifeTime = lifetime;
 }
-//typedef enum GameScreen {title , countdown} GameScreen;
 
 
 
 int main(void)
 {
+        int startTime = GetTime();
+        int endTime = countTo - GetTime();
+
+        printf("%d\n" , startTime);
+
 
     const int screenwidth = 900;
     const int screenheight = 500;
-    /*
-    int hours = 0 ;
-    int minuts = 0; 
-    */
+
 
     InitAudioDevice();
     Music music = LoadMusicStream("assets/Alarm.wav");
-    music.looping = true;
+    while (!IsWindowFocused)
+    {
+        music.looping = true;
+        if (IsWindowFocused)
+        {
+            StopMusicStream(music);
+        }
+        
 
+    }
+    
     InitWindow(screenwidth, screenheight, "POMODORO");
 
 
-   // GameScreen currentScreen = title;
     
     SetTargetFPS(60);
 
@@ -74,16 +86,6 @@ int main(void)
        
       UpdateMusicStream(music); 
 
-
-
-   /* switch (currentScreen)
-    {
-   // case title:
-        break;
-    
-    default:
-        break;
-    }*/
 
 
 
@@ -101,14 +103,21 @@ int main(void)
     if(!TimerDone(seconds)){
 
         secScreen = GetElapsed(seconds);
+        printf("%d\n" , endTime);
+
 
         }
 
         if(secScreen == countTo-1){
             PlayMusicStream(music);
             float timePlayed = 0.0f;
-
-
+            music.looping = false;
+            if (!IsWindowFocused)
+            {
+                music.looping = true;
+                if(IsKeyPressed(MOUSE_BUTTON_LEFT)){StopMusicStream(music);}
+            }
+            
 
         }
     BeginDrawing();
