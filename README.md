@@ -1,6 +1,5 @@
 # pomodoro-GUI
-WORK ONLY FOR LINUX, WILL MAKE A COMPILED VERSION FOR WINDOWS
-
+THE PORGRAM IS ON WIP
 
 This won't be a really a basic thing, i'd like to make some cool visual and appropriate modern effects, feel free to suggest. 
 
