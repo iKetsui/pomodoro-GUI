@@ -5,6 +5,7 @@
 #include <time.h>
 #include "title.c"
 #include <stdio.h>
+#include <stdlib.h>
 
 
 typedef struct Timer {
@@ -13,8 +14,8 @@ typedef struct Timer {
 } Timer;
 
 Timer seconds = {0}; 
-double countTo = 12001;
-int secScreen = 0;
+double countTo = 1200;
+int secScreen = 1200;
 
 
 
@@ -35,9 +36,11 @@ double GetElapsed(Timer timer)
     return GetTime() - timer.startTime;
 }
 
-double GetReversedElapsed(Timer timer)
+double GetReversedTime(Timer timer)
 {
-    return timer.lifeTime - GetTime(); 
+    int reversed = abs(GetElapsed(seconds) - countTo);
+
+    return reversed; 
 }
 
 void ResetTimer(Timer *timer, double lifetime)
@@ -92,7 +95,7 @@ int main(void)
         if (IsKeyPressed(KEY_SPACE) || IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
     {
 
-            secScreen = GetElapsed(seconds);
+            secScreen = GetReversedTime(seconds);
 
             StartTimer(&seconds, countTo); // Pass the address of seconds
 
@@ -102,21 +105,20 @@ int main(void)
 
     if(!TimerDone(seconds)){
 
-        secScreen = GetElapsed(seconds);
-        printf("%d\n" , endTime);
-
+        secScreen = GetReversedTime(seconds);
 
         }
 
-        if(secScreen == countTo-1){
+        if(secScreen == TimerDone(seconds)){
             PlayMusicStream(music);
             float timePlayed = 0.0f;
             music.looping = false;
-            if (!IsWindowFocused)
+            if (IsWindowFocused)
             {
-                music.looping = true;
+                music.looping = false;
                 if(IsKeyPressed(MOUSE_BUTTON_LEFT)){StopMusicStream(music);}
             }
+            else{ music.looping = true;}
             
 
         }
