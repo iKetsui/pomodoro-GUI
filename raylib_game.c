@@ -27,20 +27,7 @@ int HOUR= 0;
 
 
 void TimerFunction(){
-    --MIN;
-    SEC=60;
-    while(SEC != 0){
-        SEC - 59;
-    }
-    if(SEC == 0 && (MIN || HOUR > 0) ){
-        if(HOUR > 0 && MIN == 0){ --HOUR;}else{
-        --MIN;
-        SEC = 60;
-        }
-    }
-
     printf(" HOURS :%d , MINS :%d , SEC : %d \n" , HOUR ,MIN , SEC);
-
     } 
 
 
@@ -119,11 +106,15 @@ int main(void)
     InitWindow(screenwidth, screenheight, "POMODORO");
 
 
-    
+    SetExitKey(KEY_NULL);
+    bool exitWindowRequested = false;   
+    bool exitWindow = false;    
+
+
     SetTargetFPS(60);
 
 
-    while (!WindowShouldClose()){
+    while (!exitWindow){
 
        
        
@@ -179,9 +170,18 @@ int main(void)
     DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
     
 
-   // DrawText(TextFormat("%d" , secScreen) , 420 , 255 , 35 , WHITE);
+   // DrawText(TextFormat("%d" , secScreen) , 420 , 255 , 35 , WHITE);   
     DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 387 , 230 , 50 , WHITE);
 
+    if (exitWindowRequested == true)
+    {
+        DrawRectangle(0 , 130 , 900, 200 , BLACK);
+        DrawText("Are you Sure you want to close the program ?" , 100 , 210 , 30 , WHITE);
+        DrawText("PRESS Y/N" , 350 , 260 , 25 , WHITE);
+
+    }
+
+    
 
 
 
@@ -195,15 +195,29 @@ int main(void)
 
     DivisionFunction();
 
-        if(IsKeyPressed(KEY_ESCAPE)){
+        if(WindowShouldClose() || IsKeyPressed(KEY_ESCAPE)) exitWindowRequested = true;
+
+        if(exitWindowRequested){
+            if (IsKeyPressed(KEY_Y))
+            {
+                exitWindow = true;
+            } 
+            if (IsKeyPressed(KEY_N))
+            {
+                exitWindowRequested = false;
+            }
+        }
+            
+            
         // pop up text to confirm the exit
+        if(exitWindow){
         UnloadMusicStream(music);          // Unload music stream buffers from RAM
 
         CloseAudioDevice();     // Close audio device (music streaming is automatically stopped)
 
         CloseWindow();
-    
-         }
+        }
+         
 
 
     }
