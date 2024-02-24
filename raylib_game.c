@@ -14,10 +14,50 @@ typedef struct Timer {
 } Timer;
 
 Timer seconds = {0}; 
-double countTo = 1200;
-int secScreen = 1200;
+
+double countTo = 1200; //CHANGE THE TIMER HERE (BASED ON SECONDS) 
+
+int secScreen = 0; //Visual Text
 
 
+//still on test
+int SEC = 0;
+int MIN = 0;
+int HOUR= 0;
+
+
+void TimerFunction(){
+    --MIN;
+    SEC=60;
+    while(SEC != 0){
+        SEC - 59;
+    }
+    if(SEC == 0 && (MIN || HOUR > 0) ){
+        if(HOUR > 0 && MIN == 0){ --HOUR;}else{
+        --MIN;
+        SEC = 60;
+        }
+    }
+
+    printf(" HOURS :%d , MINS :%d , SEC : %d \n" , HOUR ,MIN , SEC);
+
+    } 
+
+
+void DivisionFunction(){ // This Function Will Turn Seconds (countTo variable) into HOURS and MINS 
+
+ int divisionfunc =  secScreen; 
+
+SEC = divisionfunc% 60;
+MIN = (divisionfunc / 60) % 60;
+HOUR = (divisionfunc / 3600);
+
+
+
+printf(" DIV: %d \n" , divisionfunc);
+printf(" HOURS :%d , MINS :%d  SEC : %d\n" , HOUR ,MIN, SEC);
+
+}
 
 
 void StartTimer(Timer *timer, double lifetime)
@@ -36,7 +76,7 @@ double GetElapsed(Timer timer)
     return GetTime() - timer.startTime;
 }
 
-double GetReversedTime(Timer timer)
+int GetReversedTime(Timer timer)
 {
     int reversed = abs(GetElapsed(seconds) - countTo);
 
@@ -134,12 +174,15 @@ int main(void)
 
 
     DrawRectangle(0,0 , screenwidth , screenheight , GRAY);
-    DrawText("Press the SPACE to start" , 280 , 200 , 25 , WHITE);
-    DrawText("(1200 sec == 20 mins)" , 335 , 230 , 20 , WHITE);
+    DrawText("Press the SPACE or MOUSE'S LEFT CLICK to start" , 155 , 200 , 23 , WHITE);
+   // DrawText("(1200 sec == 20 mins)" , 345 , 230 , 19 , WHITE);
     DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
-
-    DrawText(TextFormat("%d" , secScreen) , 420 , 255 , 35 , WHITE);
     
+
+   // DrawText(TextFormat("%d" , secScreen) , 420 , 255 , 35 , WHITE);
+    DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 387 , 230 , 50 , WHITE);
+
+
 
 
 
@@ -150,7 +193,7 @@ int main(void)
     EndDrawing();
 
 
-        
+    DivisionFunction();
 
         if(IsKeyPressed(KEY_ESCAPE)){
         // pop up text to confirm the exit
