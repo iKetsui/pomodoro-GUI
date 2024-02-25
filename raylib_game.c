@@ -1,4 +1,5 @@
 
+#include <global.h>
 #include "raylib.h"
 #include "screens.h"    // NOTE: Declares global (extern) variables and screens functions
 #include <rlgl.h>
@@ -7,15 +8,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+Timer seconds = {0};
 
-typedef struct Timer {
-    double startTime;   // Start time (seconds)
-    double lifeTime;    // Lifetime (seconds)
-} Timer;
-
-Timer seconds = {0}; 
-
-double countTo = 1200; //CHANGE THE TIMER HERE (BASED ON SECONDS) 
+int countTo = 1200; //CHANGE THE TIMER HERE (BASED ON SECONDS) 
 
 int secScreen = 0; //Visual Text
 
@@ -80,6 +75,7 @@ void ResetTimer(Timer *timer, double lifetime)
 
 int main(void)
 {
+    
         int startTime = GetTime();
         int endTime = countTo - GetTime();
 
