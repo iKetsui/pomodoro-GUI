@@ -9,7 +9,7 @@ not sure what would work and what wouldn't, it depends on my work hours put in t
 TODO; - a todo list to track it (will add more later)-
 
 
-[important]: turn the program from SECs to MINs.
+-[important]: turn the program from SECs to MINs.- DONE
 
 [important]: add parameter for the MIN.
 
