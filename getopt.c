@@ -9,22 +9,29 @@
 #include "global.h"
 
 
-int t(int argc , char **argv){
+static void getoptFunction(int argc , char **argv){
+
     opterr = 0 ;
-    int c;
+    int c = 0;
     int s;
+    char *svalue = NULL;
 
-    while((c = getopt(argc , argv , "s:")) != -1) {
+    while((c = getopt(argc , argv , "s:t")) != -1) {
 
+        int passer = 1;
         switch (c)
         {
         case 's':
-            countTo = c;
+        printf("%s \n" , optarg);
+        countTo = atoi(optarg);
             break;
+
+        case 't':
+        printf("TEST\n") ;
         
         default: 
+        printf("Use -s parameter in order to change the seconds value, otherwise, the program will default be 1200secs - 20m - .\n");
             break;
         }
     }
-    return 0;
 }

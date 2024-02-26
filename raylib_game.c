@@ -7,12 +7,15 @@
 #include "title.c"
 #include <stdio.h>
 #include <stdlib.h>
+#include "getopt.c"
+
+
 
 Timer seconds = {0};
 
-int countTo = 1200; //CHANGE THE TIMER HERE (BASED ON SECONDS) 
 
 int secScreen = 0; //Visual Text
+int countTo = 1200; //CHANGE THE TIMER HERE (BASED ON SECONDS) 
 
 
 //still on test
@@ -73,9 +76,13 @@ void ResetTimer(Timer *timer, double lifetime)
 
 
 
-int main(void)
+
+
+// MAIN FUNCTION --------------------------------------------------------------------------------------------------------------------
+int main(int argc , char **argv)
 {
-    
+    getoptFunction(argc , argv);
+
         int startTime = GetTime();
         int endTime = countTo - GetTime();
 
