@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "stdio.h": "c",
+        "time.h": "c",
+        "screens.h": "c",
+        "raylib.h": "c"
+    }
+}

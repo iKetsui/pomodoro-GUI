@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include "getopt.c"
 
+#define RAYGUI_IMPLEMENTATION
+#include "raygui.h"  
 
 
 Timer seconds = {0};
@@ -16,7 +18,6 @@ Timer seconds = {0};
 
 int secScreen = 0; //Visual Text
 int countTo = 1200; //CHANGE THE TIMER HERE (BASED ON SECONDS) 
-
 
 //still on test
 int SEC = 0;
@@ -156,17 +157,19 @@ int main(int argc , char **argv)
             
 
         }
+
+
+
+
+        // DRAWING SECTION ------------------------------------------------------------------------
     BeginDrawing();
 
 
 
 
 
-
-
-
-
-
+    ClearBackground(GRAY);
+    GuiSliderBar((Rectangle){ 200, 200, 20, 20 }, "SECONDS", NULL,  (float *)&countTo , 0, 3600);
     DrawRectangle(0,0 , screenwidth , screenheight , GRAY);
     DrawText("Press the SPACE or MOUSE'S LEFT CLICK to start" , 155 , 200 , 23 , WHITE);
    // DrawText("(1200 sec == 20 mins)" , 345 , 230 , 19 , WHITE);
@@ -178,6 +181,7 @@ int main(int argc , char **argv)
 
     if (exitWindowRequested == true)
     {
+        
         DrawRectangle(0 , 130 , 900, 200 , BLACK);
         DrawText("Are you Sure you want to close the program ?" , 100 , 210 , 30 , WHITE);
         DrawText("PRESS Y/N" , 350 , 260 , 25 , WHITE);

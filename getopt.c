@@ -13,16 +13,14 @@ static void getoptFunction(int argc , char **argv){
 
     opterr = 0 ;
     int c = 0;
-    int s;
-    char *svalue = NULL;
 
     while((c = getopt(argc , argv , "s:t")) != -1) {
 
-        int passer = 1;
         switch (c)
         {
         case 's':
         printf("%s \n" , optarg);
+        secScreen = atoi(optarg);
         countTo = atoi(optarg);
             break;
 

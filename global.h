@@ -15,4 +15,6 @@ extern int MIN;
 extern int HOUR;
 extern int countTo;
 extern int passer;
+
+
 #endif //GLOBAL_H
