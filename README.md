@@ -9,13 +9,14 @@ not sure what would work and what wouldn't, it depends on my work hours put in t
 TODO; - a todo list to track it (will add more later)-
 
 
--[important]: turn the program from SECs to MINs.- DONE
+DONE- [important]: turn the program from SECs to MINs.- 
 
 [important]: add parameter for the MIN.
 
 [important]: add modern themes.
 
-[important]: add getopt
+DONE- [important]: add getopt
 
+[important]: saparate and orginize files for both WIN and linux versions
 [effect]: add cast light linked to the mouse coordinates 
 
