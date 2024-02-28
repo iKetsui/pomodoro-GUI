@@ -13,7 +13,7 @@ DONE- [important]: turn the program from SECs to MINs.-
 
 [important]: add parameter for the MIN.
 
-[importtant]: AUTOMATIC POMODORO SETS.
+[important]: AUTOMATIC POMODORO SETS.
 
 [important]: add modern themes.
 
