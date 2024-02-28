@@ -10,8 +10,8 @@
 #include "getopt.c"
 
 #define RAYGUI_IMPLEMENTATION
-#include "raygui.h"  
 
+#include "raygui.h"
 
 Timer seconds = {0};
 
@@ -24,6 +24,7 @@ int countTo = 1200; //CHANGE THE TIMER HERE (BASED ON SECONDS)
 int SEC = 0;
 int MIN = 0;
 int HOUR= 0;
+/*DO NOT TOUCH*/ 
 
 
 
@@ -34,6 +35,8 @@ void DivisionFunction(){ // This Function Will Turn Seconds (countTo variable) i
 SEC = divisionfunc% 60;
 MIN = (divisionfunc / 60) % 60;
 HOUR = (divisionfunc / 3600);
+
+float guiCountTo = 10.0f;
 
 if(SEC > 0){
 printf(" DIV: %d \n" , divisionfunc);
@@ -163,16 +166,22 @@ int main(int argc , char **argv)
 
 
 
-
     ClearBackground(GRAY);
-    GuiSliderBar((Rectangle){ 200, 200, 20, 20 }, "SECONDS", NULL,  (float *)&countTo , 0, 3600);
-    DrawRectangle(0,0 , screenwidth , screenheight , GRAY);
+
+
+    float guiCountTo = 450.0f;
+   
+    printf("%2.f\n" , guiCountTo);
+
+    //GuiSliderPro((Rectangle){ 600, 50, 150, 20 }, "SECONDS", NULL, &guiCountTo, 0, 450 , 10);
+
+
     DrawText("Press the SPACE or MOUSE'S LEFT CLICK to start" , 155 , 200 , 23 , WHITE);
-   // DrawText("(1200 sec == 20 mins)" , 345 , 230 , 19 , WHITE);
     DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
     
 
-   // DrawText(TextFormat("%d" , secScreen) , 420 , 255 , 35 , WHITE);   
+
+
     DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 387 , 230 , 50 , WHITE);
 
     if (exitWindowRequested == true)
@@ -192,6 +201,7 @@ int main(int argc , char **argv)
 
 
     DivisionFunction();
+
 
 
     EndDrawing();
