@@ -1,30 +1,30 @@
 
-#include <global.h>
-#include "raylib.h"
-#include "screens.h"    // NOTE: Declares global (extern) variables and screens functions
-#include <rlgl.h>
+#include "include/raylib.h"
+#include "include/screens.h"    // NOTE: Declares global (extern) variables and screens functions
+#include "include/rlgl.h"
 #include <time.h>
-#include "title.c"
-#include <stdio.h>
 #include <stdlib.h>
-#include "getopt.c"
-
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"  
+#include <stdio.h>
 
 
-Timer seconds = {0};
+typedef struct Timer {  
+    double startTime;   // Start time (seconds)
+    double lifeTime;    // Lifetime (seconds)
+} Timer;
 
+Timer seconds = {0}; 
+double countTo = 4;
+int secScreen = 0;
 
-int secScreen = 0; //Visual Text
-int countTo = 1200; //CHANGE THE TIMER HERE (BASED ON SECONDS) 
-
-
-/*DO NOT TOUCH*/ 
+//still on test
 int SEC = 0;
 int MIN = 0;
 int HOUR= 0;
 
+
+void TimerFunction(){
+    printf(" HOURS :%d , MINS :%d , SEC : %d \n" , HOUR ,MIN , SEC);
+    } 
 
 
 void DivisionFunction(){ // This Function Will Turn Seconds (countTo variable) into HOURS and MINS 
@@ -35,10 +35,11 @@ SEC = divisionfunc% 60;
 MIN = (divisionfunc / 60) % 60;
 HOUR = (divisionfunc / 3600);
 
-if(SEC > 0){
+
+
 printf(" DIV: %d \n" , divisionfunc);
 printf(" HOURS :%d , MINS :%d  SEC : %d\n" , HOUR ,MIN, SEC);
-}
+
 }
 
 
@@ -58,7 +59,7 @@ double GetElapsed(Timer timer)
     return GetTime() - timer.startTime;
 }
 
-int GetReversedTime(Timer timer)
+double GetReversedTime(Timer timer)
 {
     int reversed = abs(GetElapsed(seconds) - countTo);
 
@@ -70,15 +71,12 @@ void ResetTimer(Timer *timer, double lifetime)
     timer->startTime = GetTime();
     timer->lifeTime = lifetime;
 }
+//typedef enum GameScreen {title , countdown} GameScreen;
 
 
 
-
-
-// MAIN FUNCTION --------------------------------------------------------------------------------------------------------------------
-int main(int argc , char **argv)
+int main(void)
 {
-    getoptFunction(argc , argv);
 
         int startTime = GetTime();
         int endTime = countTo - GetTime();
@@ -88,7 +86,10 @@ int main(int argc , char **argv)
 
     const int screenwidth = 900;
     const int screenheight = 500;
-
+    /*
+    int hours = 0 ;
+    int minuts = 0; 
+    */
 
     InitAudioDevice();
     Music music = LoadMusicStream("assets/Alarm.wav");
@@ -102,15 +103,17 @@ int main(int argc , char **argv)
         
 
     }
-    
-    InitWindow(screenwidth, screenheight, "POMODORO");
 
+    InitWindow(screenwidth, screenheight, "POMODORO");
 
     SetExitKey(KEY_NULL);
     bool exitWindowRequested = false;   
     bool exitWindow = false;    
 
 
+
+   // GameScreen currentScreen = title;
+    
     SetTargetFPS(60);
 
 
@@ -155,25 +158,24 @@ int main(int argc , char **argv)
         }
 
 
-
-
-        // DRAWING SECTION ------------------------------------------------------------------------
     BeginDrawing();
 
 
 
 
 
-    ClearBackground(GRAY);
-    GuiSliderBar((Rectangle){ 200, 200, 20, 20 }, "SECONDS", NULL,  (float *)&countTo , 0, 3600);
+
+
+
+
+
     DrawRectangle(0,0 , screenwidth , screenheight , GRAY);
     DrawText("Press the SPACE or MOUSE'S LEFT CLICK to start" , 155 , 200 , 23 , WHITE);
    // DrawText("(1200 sec == 20 mins)" , 345 , 230 , 19 , WHITE);
     DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
-    
 
-   // DrawText(TextFormat("%d" , secScreen) , 420 , 255 , 35 , WHITE);   
     DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 387 , 230 , 50 , WHITE);
+    
 
     if (exitWindowRequested == true)
     {
@@ -184,23 +186,16 @@ int main(int argc , char **argv)
 
     }
 
-    
 
 
 
-
-
-
-    DivisionFunction();
 
 
     EndDrawing();
 
+    DivisionFunction();
 
-
-
-
-
+        
         if(WindowShouldClose() || IsKeyPressed(KEY_ESCAPE)) exitWindowRequested = true;
 
         if(exitWindowRequested){
@@ -213,8 +208,8 @@ int main(int argc , char **argv)
                 exitWindowRequested = false;
             }
         }
-            
-            
+
+
         // pop up text to confirm the exit
         if(exitWindow){
         UnloadMusicStream(music);          // Unload music stream buffers from RAM
@@ -223,13 +218,10 @@ int main(int argc , char **argv)
 
         CloseWindow();
         }
-         
 
-    DivisionFunction();
 
     }
 
     return 0;
 
 }
-
