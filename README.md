@@ -13,6 +13,8 @@ DONE- [important]: turn the program from SECs to MINs.-
 
 [important]: add parameter for the MIN.
 
+[important]: AUTOMATIC POMODORO SETS.
+
 [important]: add modern themes.
 
 DONE- [important]: add getopt
