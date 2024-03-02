@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "getopt.c"
+#include "reasings.h"
+
 
 #define RAYGUI_IMPLEMENTATION
 
@@ -30,7 +32,9 @@ int HOUR= 0;
 
 void DivisionFunction(){ // This Function Will Turn Seconds (countTo variable) into HOURS and MINS 
 
+
  int divisionfunc =  secScreen; 
+ 
 
 SEC = divisionfunc% 60;
 MIN = (divisionfunc / 60) % 60;
@@ -78,9 +82,12 @@ void ResetTimer(Timer *timer, double lifetime)
 
 
 
+
 // MAIN FUNCTION --------------------------------------------------------------------------------------------------------------------
 int main(int argc , char **argv)
 {
+    secScreen = GetReversedTime(seconds);
+    
     getoptFunction(argc , argv);
 
         int startTime = GetTime();
@@ -116,6 +123,14 @@ int main(int argc , char **argv)
 
     SetTargetFPS(60);
 
+    DivisionFunction();
+
+    int periods = 0;
+    int framesElapesd = 0;
+    int xBall = (screenwidth);
+    int yBall = (screenwidth);
+
+    int radBall = 20;
 
     while (!exitWindow){
 
@@ -128,7 +143,7 @@ int main(int argc , char **argv)
 
         if (IsKeyPressed(KEY_SPACE) || IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
     {
-
+            periods++;
             secScreen = GetReversedTime(seconds);
 
             StartTimer(&seconds, countTo); // Pass the address of seconds
@@ -158,13 +173,58 @@ int main(int argc , char **argv)
         }
 
 
+    
+        if(periods == 0){
+            ClearBackground(GRAY);
+
+            DrawText("Press the SPACE or touch the Screen to start" , 155 , 200 , 23 , WHITE);
+            DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
+    
+            DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 370 , 230 , 50 , WHITE);
+            printf("%d \n" , framesElapesd);
+
+
+    }else if(periods == 1){
+
+        framesElapesd++;
+        radBall = (int)EaseElasticOut((float) framesElapesd , 200 , 1000 , 1500);
+
+    if (framesElapesd >= 120)
+    {
+        periods = 2;
+        framesElapesd = 0;
+        
+    }
+    } else if(periods == 2){
+        framesElapesd++;
+        ClearBackground(RED);
+
+
+        DrawText("Press the SPACE or touch the Screen to start" , 155 , 200 , 23 , WHITE);
+        DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
+
+
+        DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 370 , 230 , 50 , WHITE);
+
+    }
 
 
         // DRAWING SECTION ------------------------------------------------------------------------
     BeginDrawing();
+if(periods == 1 ){
+
+    printf("%d\n",framesElapesd);
+    ClearBackground(GRAY);
+    DrawCircle(xBall , yBall , radBall , RED);
 
 
+    DrawText("Press the SPACE or touch the Screen to start" , 155 , 200 , 23 , WHITE);
+    DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
+    DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 370 , 230 , 50 , WHITE);
 
+    
+}
+/*
 
     ClearBackground(GRAY);
 
@@ -173,7 +233,7 @@ int main(int argc , char **argv)
    
     printf("%2.f\n" , guiCountTo);
 
-    //GuiSliderPro((Rectangle){ 600, 50, 150, 20 }, "SECONDS", NULL, &guiCountTo, 0, 450 , 10);
+    GuiSliderPro((Rectangle){ 600, 50, 150, 20 }, "SECONDS", NULL, &guiCountTo, 0, 450 , 10);
 
 
     DrawText("Press the SPACE or MOUSE'S LEFT CLICK to start" , 155 , 200 , 23 , WHITE);
@@ -183,7 +243,7 @@ int main(int argc , char **argv)
 
 
     DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 387 , 230 , 50 , WHITE);
-
+*/
     if (exitWindowRequested == true)
     {
         
@@ -200,7 +260,7 @@ int main(int argc , char **argv)
 
 
 
-    DivisionFunction();
+    //DivisionFunction();
 
 
 
