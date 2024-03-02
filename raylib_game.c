@@ -143,7 +143,8 @@ int main(int argc , char **argv)
 
         if (IsKeyPressed(KEY_SPACE) || IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
     {
-            periods++;
+            periods = 1;
+            framesElapesd = 0;
             secScreen = GetReversedTime(seconds);
 
             StartTimer(&seconds, countTo); // Pass the address of seconds
@@ -185,11 +186,14 @@ int main(int argc , char **argv)
 
 
     }else if(periods == 1){
+            ClearBackground(GRAY);
+            DrawText("Press the SPACE or touch the Screen to start" , 155 , 200 , 23 , WHITE);
+            DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
 
         framesElapesd++;
         radBall = (int)EaseElasticOut((float) framesElapesd , 200 , 1000 , 1500);
 
-    if (framesElapesd >= 120)
+    if (framesElapesd >= 130)
     {
         periods = 2;
         framesElapesd = 0;
