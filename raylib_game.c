@@ -127,8 +127,8 @@ int main(int argc , char **argv)
 
     int periods = 0;
     int framesElapesd = 0;
-    int xBall = (screenwidth);
-    int yBall = (screenwidth);
+    int xBall = (screenwidth+150);
+    int yBall = (screenheight+390);
 
     int radBall = 20;
 
@@ -163,6 +163,8 @@ int main(int argc , char **argv)
             PlayMusicStream(music);
             float timePlayed = 0.0f;
             music.looping = false;
+            periods = 3;
+            framesElapesd = 0;
             if (IsWindowFocused)
             {
                 music.looping = false;
@@ -176,7 +178,7 @@ int main(int argc , char **argv)
 
     
         if(periods == 0){
-            ClearBackground(GRAY);
+            ClearBackground(DARKGRAY);
 
             DrawText("Press the SPACE or touch the Screen to start" , 155 , 200 , 23 , WHITE);
             DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
@@ -186,22 +188,59 @@ int main(int argc , char **argv)
 
 
     }else if(periods == 1){
-            ClearBackground(GRAY);
+            ClearBackground(DARKGRAY);
             DrawText("Press the SPACE or touch the Screen to start" , 155 , 200 , 23 , WHITE);
             DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
 
         framesElapesd++;
         radBall = (int)EaseElasticOut((float) framesElapesd , 200 , 1000 , 1500);
 
-    if (framesElapesd >= 130)
+    if (framesElapesd >= 140)
     {
         periods = 2;
         framesElapesd = 0;
-        
+        xBall = (screenwidth+120);
+        yBall = (screenheight+165);
+        radBall = 20;
+
+
+
     }
     } else if(periods == 2){
         framesElapesd++;
         ClearBackground(RED);
+
+
+        DrawText("Press the SPACE or touch the Screen to start" , 155 , 200 , 23 , WHITE);
+        DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
+
+
+        DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 370 , 230 , 50 , WHITE);
+
+    }else if(periods == 3){
+        framesElapesd++;
+        ClearBackground(RED);
+
+
+        DrawText("Press the SPACE or touch the Screen to start" , 155 , 200 , 23 , WHITE);
+        DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
+
+
+        DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 370 , 230 , 50 , WHITE);
+        radBall = (int)EaseElasticOut((float) framesElapesd , 200 , 1000 , 1500);
+        if(framesElapesd >= 140){
+            periods = 4;
+            framesElapesd = 0;
+            xBall = (screenwidth+150);
+            yBall = (screenheight+390);
+            radBall = 20;
+
+        }
+        
+
+    }else if(periods == 4){
+        framesElapesd++;
+        ClearBackground(PURPLE);
 
 
         DrawText("Press the SPACE or touch the Screen to start" , 155 , 200 , 23 , WHITE);
@@ -218,8 +257,19 @@ int main(int argc , char **argv)
 if(periods == 1 ){
 
     printf("%d\n",framesElapesd);
-    ClearBackground(GRAY);
+    ClearBackground(DARKGRAY);
     DrawCircle(xBall , yBall , radBall , RED);
+
+
+    DrawText("Press the SPACE or touch the Screen to start" , 155 , 200 , 23 , WHITE);
+    DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
+    DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 370 , 230 , 50 , WHITE);
+
+    
+}else if(periods == 3 ){
+
+    printf("period 3: %d\n",framesElapesd);
+    DrawCircle(xBall , yBall , radBall , PURPLE);
 
 
     DrawText("Press the SPACE or touch the Screen to start" , 155 , 200 , 23 , WHITE);
@@ -251,7 +301,7 @@ if(periods == 1 ){
     if (exitWindowRequested == true)
     {
         
-        DrawRectangle(0 , 130 , 900, 200 , BLACK);
+        DrawRectangle(0 , 130 , 900, 200 , Fade(BLACK , 0.90f));
         DrawText("Are you Sure you want to close the program ?" , 100 , 210 , 30 , WHITE);
         DrawText("PRESS Y/N" , 350 , 260 , 25 , WHITE);
 
