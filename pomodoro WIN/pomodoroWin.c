@@ -1,45 +1,52 @@
 
-#include "include/raylib.h"
-#include "include/screens.h"    // NOTE: Declares global (extern) variables and screens functions
-#include "include/rlgl.h"
+#include "include\global.h"
+#include "raylib.h"
+#include "screens.h"    // NOTE: Declares global (extern) variables and screens functions
+#include "rlgl.h"
 #include <time.h>
-#include <stdlib.h>
+#include "title.c"
 #include <stdio.h>
+#include <stdlib.h>
+#include "getopt.c"
+#include "reasings.h"
 
 
-typedef struct Timer {  
-    double startTime;   // Start time (seconds)
-    double lifeTime;    // Lifetime (seconds)
-} Timer;
 
-Timer seconds = {0}; 
-double countTo = 4;
-int secScreen = 0;
+#define RAYGUI_IMPLEMENTATION
 
-//still on test
+#include "raygui.h"
+
+Timer seconds = {0};
+
+
+int secScreen = 0; //Visual Text
+int countTo = 5; //CHANGE THE TIMER HERE (BASED ON SECONDS) 
+
+
+/*DO NOT TOUCH*/ 
 int SEC = 0;
 int MIN = 0;
 int HOUR= 0;
+/*DO NOT TOUCH*/ 
 
-
-void TimerFunction(){
-    printf(" HOURS :%d , MINS :%d , SEC : %d \n" , HOUR ,MIN , SEC);
-    } 
 
 
 void DivisionFunction(){ // This Function Will Turn Seconds (countTo variable) into HOURS and MINS 
 
+
  int divisionfunc =  secScreen; 
+ 
 
 SEC = divisionfunc% 60;
 MIN = (divisionfunc / 60) % 60;
 HOUR = (divisionfunc / 3600);
 
+float guiCountTo = 10.0f;
 
-
+if(SEC > 0){
 printf(" DIV: %d \n" , divisionfunc);
 printf(" HOURS :%d , MINS :%d  SEC : %d\n" , HOUR ,MIN, SEC);
-
+}
 }
 
 
@@ -59,7 +66,7 @@ double GetElapsed(Timer timer)
     return GetTime() - timer.startTime;
 }
 
-double GetReversedTime(Timer timer)
+int GetReversedTime(Timer timer)
 {
     int reversed = abs(GetElapsed(seconds) - countTo);
 
@@ -71,12 +78,18 @@ void ResetTimer(Timer *timer, double lifetime)
     timer->startTime = GetTime();
     timer->lifeTime = lifetime;
 }
-//typedef enum GameScreen {title , countdown} GameScreen;
 
 
 
-int main(void)
+
+
+
+// MAIN FUNCTION --------------------------------------------------------------------------------------------------------------------
+int main(int argc , char **argv)
 {
+    secScreen = GetReversedTime(seconds);
+    
+    getoptFunction(argc , argv);
 
         int startTime = GetTime();
         int endTime = countTo - GetTime();
@@ -86,10 +99,7 @@ int main(void)
 
     const int screenwidth = 900;
     const int screenheight = 500;
-    /*
-    int hours = 0 ;
-    int minuts = 0; 
-    */
+
 
     InitAudioDevice();
     Music music = LoadMusicStream("assets/Alarm.wav");
@@ -103,19 +113,25 @@ int main(void)
         
 
     }
-
+    
     InitWindow(screenwidth, screenheight, "POMODORO");
+
 
     SetExitKey(KEY_NULL);
     bool exitWindowRequested = false;   
     bool exitWindow = false;    
 
 
-
-   // GameScreen currentScreen = title;
-    
     SetTargetFPS(60);
 
+    DivisionFunction();
+
+    int periods = 0;
+    int framesElapesd = 0;
+    int xBall = (screenwidth+150);
+    int yBall = (screenheight+390);
+
+    int radBall = 20;
 
     while (!exitWindow){
 
@@ -128,7 +144,8 @@ int main(void)
 
         if (IsKeyPressed(KEY_SPACE) || IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
     {
-
+            periods = 1;
+            framesElapesd = 0;
             secScreen = GetReversedTime(seconds);
 
             StartTimer(&seconds, countTo); // Pass the address of seconds
@@ -147,6 +164,8 @@ int main(void)
             PlayMusicStream(music);
             float timePlayed = 0.0f;
             music.looping = false;
+            periods = 3;
+            framesElapesd = 0;
             if (IsWindowFocused)
             {
                 music.looping = false;
@@ -158,44 +177,155 @@ int main(void)
         }
 
 
+    
+        if(periods == 0){
+            ClearBackground(DARKGRAY);
+
+            DrawText("Press the SPACE or touch the Screen to start" , 155 , 200 , 23 , WHITE);
+            DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
+    
+            DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 370 , 230 , 50 , WHITE);
+            printf("%d \n" , framesElapesd);
+
+
+    }else if(periods == 1){
+            ClearBackground(DARKGRAY);
+            DrawText("Press the SPACE or touch the Screen to start" , 155 , 200 , 23 , WHITE);
+            DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
+
+        framesElapesd++;
+        radBall = (int)EaseElasticOut((float) framesElapesd , 200 , 1000 , 1500);
+
+    if (framesElapesd >= 140)
+    {
+        periods = 2;
+        framesElapesd = 0;
+        xBall = (screenwidth+120);
+        yBall = (screenheight+165);
+        radBall = 20;
+
+
+
+    }
+    } else if(periods == 2){
+        framesElapesd++;
+        ClearBackground(RED);
+
+
+        DrawText("Press the SPACE or touch the Screen to start" , 155 , 200 , 23 , WHITE);
+        DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
+
+
+        DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 370 , 230 , 50 , WHITE);
+
+    }else if(periods == 3){
+        framesElapesd++;
+        ClearBackground(RED);
+
+
+        DrawText("Press the SPACE or touch the Screen to start" , 155 , 200 , 23 , WHITE);
+        DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
+
+
+        DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 370 , 230 , 50 , WHITE);
+        radBall = (int)EaseElasticOut((float) framesElapesd , 200 , 1000 , 1500);
+        if(framesElapesd >= 140){
+            periods = 4;
+            framesElapesd = 0;
+            xBall = (screenwidth+150);
+            yBall = (screenheight+390);
+            radBall = 20;
+
+        }
+        
+
+    }else if(periods == 4){
+        framesElapesd++;
+        ClearBackground(PURPLE);
+
+
+        DrawText("Press the SPACE or touch the Screen to start" , 155 , 200 , 23 , WHITE);
+        DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
+
+
+        DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 370 , 230 , 50 , WHITE);
+
+    }
+
+
+        // DRAWING SECTION ------------------------------------------------------------------------
     BeginDrawing();
+if(periods == 1 ){
+
+    printf("%d\n",framesElapesd);
+    ClearBackground(DARKGRAY);
+    DrawCircle(xBall , yBall , radBall , RED);
 
 
-
-
-
-
-
-
-
-
-    DrawRectangle(0,0 , screenwidth , screenheight , GRAY);
-    DrawText("Press the SPACE or MOUSE'S LEFT CLICK to start" , 155 , 200 , 23 , WHITE);
-   // DrawText("(1200 sec == 20 mins)" , 345 , 230 , 19 , WHITE);
+    DrawText("Press the SPACE or touch the Screen to start" , 155 , 200 , 23 , WHITE);
     DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
+    DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 370 , 230 , 50 , WHITE);
 
-    DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 387 , 230 , 50 , WHITE);
+    
+}else if(periods == 3 ){
+
+    printf("period 3: %d\n",framesElapesd);
+    DrawCircle(xBall , yBall , radBall , PURPLE);
+
+
+    DrawText("Press the SPACE or touch the Screen to start" , 155 , 200 , 23 , WHITE);
+    DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
+    DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 370 , 230 , 50 , WHITE);
+
+    
+}
+/*
+
+    ClearBackground(GRAY);
+
+
+    float guiCountTo = 450.0f;
+   
+    printf("%2.f\n" , guiCountTo);
+
+    GuiSliderPro((Rectangle){ 600, 50, 150, 20 }, "SECONDS", NULL, &guiCountTo, 0, 450 , 10);
+
+
+    DrawText("Press the SPACE or MOUSE'S LEFT CLICK to start" , 155 , 200 , 23 , WHITE);
+    DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
     
 
+
+
+    DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 387 , 230 , 50 , WHITE);
+*/
     if (exitWindowRequested == true)
     {
         
-        DrawRectangle(0 , 130 , 900, 200 , BLACK);
+        DrawRectangle(0 , 130 , 900, 200 , Fade(BLACK , 0.90f));
         DrawText("Are you Sure you want to close the program ?" , 100 , 210 , 30 , WHITE);
         DrawText("PRESS Y/N" , 350 , 260 , 25 , WHITE);
 
     }
 
+    
 
 
+
+
+
+
+    //DivisionFunction();
 
 
 
     EndDrawing();
 
-    DivisionFunction();
 
-        
+
+
+
+
         if(WindowShouldClose() || IsKeyPressed(KEY_ESCAPE)) exitWindowRequested = true;
 
         if(exitWindowRequested){
@@ -208,8 +338,8 @@ int main(void)
                 exitWindowRequested = false;
             }
         }
-
-
+            
+            
         // pop up text to confirm the exit
         if(exitWindow){
         UnloadMusicStream(music);          // Unload music stream buffers from RAM
@@ -218,10 +348,13 @@ int main(void)
 
         CloseWindow();
         }
+         
 
+    DivisionFunction();
 
     }
 
     return 0;
 
 }
+
