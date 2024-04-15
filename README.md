@@ -11,14 +11,13 @@ TODO; - a todo list to track it (will add more later)-
 
 DONE- [important]: turn the program from SECs to MINs.- 
 
-[important]: add parameter for the MIN.
+DONE- [important]: add parameter for the MIN.
 
 [important]: AUTOMATIC POMODORO SETS.
 
-[important]: add modern themes.
+DONE- [important]: add modern theme.
 
 DONE- [important]: add getopt
 
-[important]: saparate and orginize files for both WIN and linux versions
-[effect]: add cast light linked to the mouse coordinates 
+DONE- [important]: saparate and orginize files for both WIN and linux versions 
 
