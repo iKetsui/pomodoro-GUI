@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include "getopt.c"
 #include "reasings.h"
-
+#include "math.h"
 
 #define RAYGUI_IMPLEMENTATION
 
@@ -78,9 +78,15 @@ void ResetTimer(Timer *timer, double lifetime)
     timer->lifeTime = lifetime;
 }
 
+float easeInSine(float num) {
 
+  return 1 - cos((num* PI) / 2);
+}
 
+float lerp (float a , float b , float t1 , float t2){
 
+  return (a + (t1/t2)* (b - a));  
+  }
 
 
 // MAIN FUNCTION --------------------------------------------------------------------------------------------------------------------
@@ -96,36 +102,30 @@ int main(int argc , char **argv)
         printf("%d\n" , startTime);
 
 
-    const int screenwidth = 900;
+    const int screenwidth = 925;
     const int screenheight = 500;
 
-
-    InitAudioDevice();
+    float time1 = secScreen/countTo; 
+    float width = 0;
+    int height = screenheight;
+    float per = fmod(GetElapsed(seconds), countTo);
+    InitAudioDevice(); 
     Music music = LoadMusicStream("assets/Alarm.wav");
-    while (!IsWindowFocused)
-    {
-        music.looping = true;
-        if (IsWindowFocused)
-        {
-            StopMusicStream(music);
-        }
-        
-
-    }
+   
     
     InitWindow(screenwidth, screenheight, "POMODORO");
 
 
     SetExitKey(KEY_NULL);
     bool exitWindowRequested = false;   
-    bool exitWindow = false;    
-
+    bool exitWindow = false;
 
     SetTargetFPS(60);
 
     DivisionFunction();
 
     int periods = 0;
+
     int framesElapesd = 0;
     int xBall = (screenwidth+150);
     int yBall = (screenheight+390);
@@ -137,7 +137,8 @@ int main(int argc , char **argv)
        
        
       UpdateMusicStream(music); 
-
+        
+        
 
 
 
@@ -146,6 +147,7 @@ int main(int argc , char **argv)
             periods = 1;
             framesElapesd = 0;
             secScreen = GetReversedTime(seconds);
+            music.looping = false;
 
             StartTimer(&seconds, countTo); // Pass the address of seconds
 
@@ -162,15 +164,14 @@ int main(int argc , char **argv)
         if(secScreen == TimerDone(seconds)){
             PlayMusicStream(music);
             float timePlayed = 0.0f;
-            music.looping = false;
+            music.looping = true;
             periods = 3;
             framesElapesd = 0;
-            if (IsWindowFocused)
+            if (IsWindowMinimized)
             {
-                music.looping = false;
-                if(IsKeyPressed(MOUSE_BUTTON_LEFT)){StopMusicStream(music);}
+                music.looping = true;
+                if(!IsWindowMinimized){ music.looping = false;}
             }
-            else{ music.looping = true;}
             
 
         }
@@ -184,6 +185,9 @@ int main(int argc , char **argv)
             DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
     
             DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 370 , 230 , 50 , WHITE);
+              DrawRectangle(0 , screenheight-3 , width , 20 , WHITE);
+                  
+
             printf("%d \n" , framesElapesd);
 
 
@@ -191,6 +195,7 @@ int main(int argc , char **argv)
             ClearBackground(DARKGRAY);
             DrawText("Press the SPACE or touch the Screen to start" , 155 , 200 , 23 , WHITE);
             DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
+
 
         framesElapesd++;
         radBall = (int)EaseElasticOut((float) framesElapesd , 200 , 1000 , 1500);
@@ -216,6 +221,10 @@ int main(int argc , char **argv)
 
 
         DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 370 , 230 , 50 , WHITE);
+              DrawRectangle(0 , screenheight-3 , width , 20 , WHITE);
+              width = lerp(0, screenwidth , secScreen , countTo);
+              printf("width : %f" , width);
+
 
     }else if(periods == 3){
         framesElapesd++;
@@ -227,6 +236,10 @@ int main(int argc , char **argv)
 
 
         DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 370 , 230 , 50 , WHITE);
+                      DrawRectangle(0 , screenheight-3 , width , 20 , WHITE);
+              width = lerp(0, screenwidth , secScreen , countTo);
+              
+
         radBall = (int)EaseElasticOut((float) framesElapesd , 200 , 1000 , 1500);
         if(framesElapesd >= 140){
             periods = 4;
@@ -248,6 +261,10 @@ int main(int argc , char **argv)
 
 
         DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 370 , 230 , 50 , WHITE);
+                      DrawRectangle(0 , screenheight-1 , width , 20 , WHITE);
+              width = lerp(0, screenwidth , secScreen , countTo);
+
+
 
     }
 
@@ -264,6 +281,9 @@ if(periods == 1 ){
     DrawText("Press the SPACE or touch the Screen to start" , 155 , 200 , 23 , WHITE);
     DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
     DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 370 , 230 , 50 , WHITE);
+              DrawRectangle(0 , screenheight-1 ,(float) width , 20 , WHITE);
+              width = lerp(0, screenwidth , secScreen , countTo);
+              printf("width : %f" , width);
 
     
 }else if(periods == 3 ){
@@ -275,6 +295,7 @@ if(periods == 1 ){
     DrawText("Press the SPACE or touch the Screen to start" , 155 , 200 , 23 , WHITE);
     DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
     DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 370 , 230 , 50 , WHITE);
+    
 
     
 }
