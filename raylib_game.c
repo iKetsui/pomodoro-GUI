@@ -19,7 +19,7 @@ Timer seconds = {0};
 
 
 int secScreen = 0; //Visual Text
-int countTo = 1200; //CHANGE THE TIMER HERE (BASED ON SECONDS) 
+int countTo = 10; //CHANGE THE TIMER HERE (BASED ON SECONDS) 
 
 
 /*DO NOT TOUCH*/ 
@@ -129,12 +129,13 @@ int main(int argc , char **argv)
     int framesElapesd = 0;
     int xBall = (screenwidth+150);
     int yBall = (screenheight+390);
+    float speed = (float)screenwidth / (float)countTo;   
 
     int radBall = 20;
 
     while (!exitWindow){
 
-       
+    float delta = GetFrameTime();   
        
       UpdateMusicStream(music); 
         
@@ -221,9 +222,9 @@ int main(int argc , char **argv)
 
 
         DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 370 , 230 , 50 , WHITE);
-              DrawRectangle(0 , screenheight-3 , width , 20 , WHITE);
-              width = lerp(0, screenwidth , secScreen , countTo);
-              printf("width : %f" , width);
+        width += delta * speed;
+        DrawRectangle(0 , screenheight-3 , width , 20 , WHITE);
+        printf("width : %f" , width);
 
 
     }else if(periods == 3){
@@ -236,8 +237,8 @@ int main(int argc , char **argv)
 
 
         DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 370 , 230 , 50 , WHITE);
+        width += delta * speed;
                       DrawRectangle(0 , screenheight-3 , width , 20 , WHITE);
-              width = lerp(0, screenwidth , secScreen , countTo);
               
 
         radBall = (int)EaseElasticOut((float) framesElapesd , 200 , 1000 , 1500);
@@ -261,8 +262,8 @@ int main(int argc , char **argv)
 
 
         DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 370 , 230 , 50 , WHITE);
+        width += delta * speed;
                       DrawRectangle(0 , screenheight-1 , width , 20 , WHITE);
-              width = lerp(0, screenwidth , secScreen , countTo);
 
 
 
@@ -281,8 +282,8 @@ if(periods == 1 ){
     DrawText("Press the SPACE or touch the Screen to start" , 155 , 200 , 23 , WHITE);
     DrawText("Press the ESC to close the window" , 0 , 5 , 17 , BLACK);
     DrawText(TextFormat("%d:%d:%d" , HOUR , MIN , SEC) , 370 , 230 , 50 , WHITE);
+        width += delta * speed;
               DrawRectangle(0 , screenheight-1 ,(float) width , 20 , WHITE);
-              width = lerp(0, screenwidth , secScreen , countTo);
               printf("width : %f" , width);
 
     
