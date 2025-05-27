@@ -19,7 +19,7 @@ Timer seconds = {0};
 
 
 int secScreen = 0; //Visual Text
-int countTo = 10; //CHANGE THE TIMER HERE (BASED ON SECONDS) 
+int countTo = 1200; //CHANGE THE TIMER HERE (BASED ON SECONDS) 
 
 
 /*DO NOT TOUCH*/ 
